@@ -25,12 +25,12 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[Length(min=6)])
 
 
-# class UserEditProfileForm(FlaskForm):
-#     """For for editing user profiles."""
+class UserEditProfileForm(FlaskForm):
+    """For for editing user profiles."""
 
-#     username = StringField('Username', validators=[DataRequired()])
-#     email = StringField('E-mail', validators=[DataRequired(), Email()])
-#     image_url = StringField('(Optional) Image URL')
-#     header_image_url = StringField('(Optional) Image URL')
-#     bio 
-#     password = PasswordField('Password', validators=[Length(min=6)])
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    image_url = StringField('(Optional) Profile Image URL')
+    header_image_url = StringField('(Optional) Header Image URL')
+    bio = TextAreaField('(Optional) Bio: Tell us about yourself')
+    password = PasswordField('Password', validators=[Length(min=6)])
