@@ -230,6 +230,8 @@ def profile():
             db.session.commit()
             return redirect(f"/users/{g.user.id}")
 
+        flash("Incorrect password! Please try again.", 'danger')
+
     return render_template('users/edit.html', form=form, user_id=g.user.id)
 
 @app.route('/users/delete', methods=["POST"])
@@ -310,8 +312,14 @@ def homepage():
     """
 
     if g.user:
+        
+        # grab all user ids current user is following
+        user_ids_following = [u.id for u in g.user.following] + [g.user.id]
+
+        # filter for most recent 100 messages from followed user ids
         messages = (Message
                     .query
+                    .filter(Message.user_id.in_(user_ids_following))
                     .order_by(Message.timestamp.desc())
                     .limit(100)
                     .all())
