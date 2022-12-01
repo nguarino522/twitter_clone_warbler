@@ -152,7 +152,7 @@ def users_show(user_id):
                 .order_by(Message.timestamp.desc())
                 .limit(100)
                 .all())
-    return render_template('users/show.html', user=user, messages=messages)
+    return render_template('users/show.html', user=user, messages=messages, likes=g.user.likes)
 
 
 @app.route('/users/<int:user_id>/following')
@@ -324,7 +324,7 @@ def homepage():
                     .limit(100)
                     .all())
 
-        return render_template('home.html', messages=messages)
+        return render_template('home.html', messages=messages, likes=g.user.likes)
 
     else:
         return render_template('home-anon.html')
@@ -346,3 +346,38 @@ def add_header(req):
     req.headers["Expires"] = "0"
     req.headers['Cache-Control'] = 'public, max-age=0'
     return req
+
+
+##############################################################################
+# Likes routes:
+
+@app.route('/users/<int:user_id>/likes')
+def show_likes(user_id):
+    """Show list of posts this user has liked."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    user = User.query.get_or_404(user_id)
+    likes = user.likes
+    return render_template('users/likes.html', user=user, likes=likes)
+
+
+@app.route('/users/toggle_like/<int:message_id>')
+def toggle_like(message_id):
+    """route to toggle liking a message/post for the currently logged in user"""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+    
+    msg = Message.query.get_or_404(message_id)
+
+    if msg.user_id == g.user.id:
+        return abort(403)
+    
+    likes = g.user.likes
+
+    return "tmp"
+
