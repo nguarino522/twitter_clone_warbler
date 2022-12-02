@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, flash, redirect, session, g
+from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
@@ -225,6 +225,7 @@ def profile():
             g.user.email = form.email.data
             g.user.image_url = form.image_url.data or g.user.image_url
             g.user.header_image_url = form.header_image_url.data or g.user.header_image_url
+            g.user.location = form.location.data or g.user.location
             g.user.bio = form.bio.data or g.user.bio
 
             db.session.commit()
@@ -364,7 +365,7 @@ def show_likes(user_id):
     return render_template('users/likes.html', user=user, likes=likes)
 
 
-@app.route('/users/toggle_like/<int:message_id>')
+@app.route('/users/toggle_like/<int:message_id>', methods=['POST'])
 def toggle_like(message_id):
     """route to toggle liking a message/post for the currently logged in user"""
 
@@ -373,11 +374,20 @@ def toggle_like(message_id):
         return redirect("/")
     
     msg = Message.query.get_or_404(message_id)
-
+    
     if msg.user_id == g.user.id:
         return abort(403)
     
-    likes = g.user.likes
-
-    return "tmp"
+    liked_msgs = g.user.likes
+    
+    if msg in liked_msgs:
+        g.user.likes = [like for like in liked_msgs if like != msg]
+        msg_liked = False
+    else:
+        g.user.likes.append(msg)
+        msg_liked = True
+    
+    db.session.commit()
+    
+    return jsonify({'msg_liked': msg_liked})
 

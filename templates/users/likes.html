@@ -16,11 +16,11 @@
                     <p>{{ like.text }}</p>
                 </div>
                 {% if user.id == g.user.id %}
-                <form method="POST" action="/messages/{{ like.id }}/like" class="messages-like">
+                <div class="messages-like">
                     <button class="btn btn-sm {{'btn-primary'}}">
-                        <i class="fa fa-thumbs-up"></i>
+                        <i class="fa fa-thumbs-up" data-id="{{ like.id }}"></i>
                     </button>
-                </form>
+                </div>
                 {% endif %}
             </li>
             {% endfor %}

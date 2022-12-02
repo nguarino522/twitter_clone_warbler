@@ -18,11 +18,11 @@
         <p>{{ message.text }}</p>
       </div>
       {% if g.user.id != message.user_id %}
-      <form method="POST" action="/users/toggle_like/{{ message.id }}" class="messages-like">
+      <div class="messages-like">
         <button class="btn btn-sm {{'btn-primary' if message in likes else 'btn-secondary'}}">
-          <i class="fa fa-thumbs-up"></i> 
+          <i class="fa fa-thumbs-up" data-id="{{ message.id }}"></i> 
         </button>
-      </form>
+      </div>
       {% endif %}
     </li>
 

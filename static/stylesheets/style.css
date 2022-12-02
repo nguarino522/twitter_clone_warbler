@@ -529,6 +529,19 @@ p.card-bio {
   z-index: 1;
 }
 
+.messages-like-single {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  z-index: 1;
+}
+
+.like-button-single-message {
+
+  bottom:0;
+  right:0;
+}
+
 /* ================================ 404 page */
 
 .message-404 {
