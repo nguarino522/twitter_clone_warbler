@@ -391,3 +391,12 @@ def toggle_like(message_id):
     
     return jsonify({'msg_liked': msg_liked})
 
+
+
+##############################################################################
+# 404 error handling route:
+@app.errorhandler(404)
+def page_not_found(e):
+    """404 NOT FOUND page."""
+
+    return render_template('404.html'), 404
