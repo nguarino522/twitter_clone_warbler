@@ -152,7 +152,8 @@ def users_show(user_id):
                 .order_by(Message.timestamp.desc())
                 .limit(100)
                 .all())
-    return render_template('users/show.html', user=user, messages=messages, likes=g.user.likes)
+    likes=user.likes
+    return render_template('users/show.html', user=user, messages=messages, likes=likes)
 
 
 @app.route('/users/<int:user_id>/following')
@@ -281,7 +282,7 @@ def messages_add():
 def messages_show(message_id):
     """Show a message."""
 
-    msg = Message.query.get(message_id)
+    msg = Message.query.get_or_404(message_id)
     return render_template('messages/show.html', message=msg)
 
 

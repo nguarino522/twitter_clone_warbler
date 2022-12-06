@@ -26,7 +26,7 @@ with app.app_context():
 
 
 class UserModelTestCase(TestCase):
-    """Test views for messages."""
+    """Test models for users."""
 
     def setUp(self):
         """Create test client, add sample data."""
@@ -79,6 +79,7 @@ class UserModelTestCase(TestCase):
         with app.app_context():
             res = super().tearDown()
             db.session.rollback()
+            db.drop_all()
             return res
     
     def test_user_model(self):
